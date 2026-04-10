@@ -1,0 +1,13 @@
+package com.andreichelaru.prier;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class PrierApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
