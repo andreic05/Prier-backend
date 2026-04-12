@@ -1,6 +1,7 @@
 package com.andreichelaru.prier.product;
 
-import com.andreichelaru.prier.product.dto.ProductDTO;
+import com.andreichelaru.prier.product.dto.response.ProductResponse;
+import com.andreichelaru.prier.product.dto.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +19,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDTO> getProducts() {
+    public List<ProductResponse> getProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProduct(@PathVariable Long id) {
+    public ProductResponse getProduct(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
     @GetMapping("/search")
-    public ProductDTO getProductByName(@RequestParam(required = false) String name) {
+    public ProductResponse getProductByName(@RequestParam(required = false) String name) {
         if (name != null) {
             return productService.getProductByName(name);
         }
@@ -37,13 +38,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
-        return productService.createProduct(productDTO);
+    public com.andreichelaru.prier.product.dto.response.ProductResponse createProduct(@RequestBody ProductRequest ProductResponse) {
+        return productService.createProduct(ProductResponse);
     }
 
     @PostMapping("/bulk")
-    public List<ProductDTO> createProducts(@RequestBody List<ProductDTO> productDTOs) {
-        return productService.createProducts(productDTOs);
+    public List<ProductResponse> createProducts(@RequestBody List<ProductRequest> ProductResponses) {
+        return productService.createProducts(ProductResponses);
     }
 
 }

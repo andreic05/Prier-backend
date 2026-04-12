@@ -1,6 +1,7 @@
 package com.andreichelaru.prier.product;
 
-import com.andreichelaru.prier.product.dto.ProductDTO;
+import com.andreichelaru.prier.product.dto.request.ProductRequest;
+import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         List<Product> products = (ArrayList<Product>) productRepository.findAll();
-        List<ProductDTO> productDTOs = new ArrayList<>();
+        List<ProductResponse> productDTOs = new ArrayList<>();
 
         for (Product product : products) {
-            ProductDTO productDTO = productMapper.toProductDTO(product);
+            ProductResponse productDTO = productMapper.toResponse(product);
             productDTOs.add(productDTO);
         }
 
@@ -34,39 +35,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getProductById(Long id) {
+    public ProductResponse getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::toProductDTO).orElse(null);
+        return product.map(productMapper::toResponse).orElse(null);
     }
 
     @Override
-    public ProductDTO getProductByName(String name) {
+    public ProductResponse getProductByName(String name) {
         Optional<Product> product = productRepository.getProductByName(name);
 
-        return product.map(productMapper::toProductDTO).orElse(null);
+        return product.map(productMapper::toResponse).orElse(null);
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        Product product = productMapper.toProduct(productDTO);
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        Product product = productMapper.toProduct(productRequest);
         product = productRepository.save(product);
 
-        return productMapper.toProductDTO(product);
+        return productMapper.toResponse(product);
     }
 
     @Override
-    public List<ProductDTO> createProducts(List<ProductDTO> productDTOs) {
+    public List<ProductResponse> createProducts(List<ProductRequest> productRequests) {
         List<Product> products = new ArrayList<>();
-        for (ProductDTO productDTO : productDTOs) {
+        for (ProductRequest productDTO : productRequests) {
             products.add(productMapper.toProduct(productDTO));
         }
         products = (ArrayList<Product>) productRepository.saveAll(products);
 
-        List<ProductDTO> newProductDTOs = new ArrayList<>();
+        List<ProductResponse> newProductResponses = new ArrayList<>();
         for (Product product : products) {
-            newProductDTOs.add(productMapper.toProductDTO(product));
+            newProductResponses.add(productMapper.toResponse(product));
         }
 
-        return newProductDTOs;
+        return newProductResponses;
     }
 }

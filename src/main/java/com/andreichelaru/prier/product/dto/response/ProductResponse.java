@@ -1,4 +1,4 @@
-package com.andreichelaru.prier.product.dto;
+package com.andreichelaru.prier.product.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductResponse {
     private Long id;
     private String name;
     private String description;
@@ -17,3 +17,4 @@ public class ProductDTO {
     // images
     // variants
 }
+
