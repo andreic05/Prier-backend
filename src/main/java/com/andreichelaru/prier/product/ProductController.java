@@ -2,12 +2,15 @@ package com.andreichelaru.prier.product;
 
 import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import com.andreichelaru.prier.product.dto.request.ProductRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/products")
 public class ProductController {
 
@@ -38,7 +41,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public com.andreichelaru.prier.product.dto.response.ProductResponse createProduct(@RequestBody ProductRequest ProductResponse) {
+    public com.andreichelaru.prier.product.dto.response.ProductResponse createProduct(@Valid @RequestBody ProductRequest ProductResponse) {
         return productService.createProduct(ProductResponse);
     }
 

@@ -5,6 +5,9 @@ import com.andreichelaru.prier.product.dto.request.ProductRequest;
 import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ProductMapper {
 
@@ -26,5 +29,23 @@ public class ProductMapper {
         product.setMetaData(product.getMetaData());
 
         return product;
+    }
+
+    public List<Product> toProductList(List<ProductRequest> productRequests) {
+        List<Product> products = new ArrayList<>();
+        for (ProductRequest productRequest : productRequests) {
+            products.add(toProduct(productRequest));
+        }
+
+        return products;
+    }
+
+    public List<ProductResponse> toProductResponseList(List<Product> products) {
+        List<ProductResponse> productResponses = new ArrayList<>();
+        for (Product product : products) {
+            ProductResponse productResponse = new ProductResponse();
+        }
+
+        return productResponses;
     }
 }
