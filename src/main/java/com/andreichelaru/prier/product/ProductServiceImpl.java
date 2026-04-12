@@ -1,5 +1,7 @@
 package com.andreichelaru.prier.product;
 
+import com.andreichelaru.prier.common.exceptions.BusinessException;
+import com.andreichelaru.prier.common.exceptions.ErrorModel;
 import com.andreichelaru.prier.product.dto.request.ProductRequest;
 import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
@@ -37,7 +39,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::toResponse).orElse(null);
+        if (product.isPresent()) return productMapper.toResponse(product.get());
+
+        throw new BusinessException(ErrorModel.createList(new ErrorModel("INVALID_ID", "No product with id " + id)));
     }
 
     @Override
