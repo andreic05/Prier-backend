@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -33,10 +34,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.map(productMapper::toProductDTO).orElse(null);
+    }
+
+    @Override
+    public ProductDTO getProductByName(String name) {
+        Optional<Product> product = productRepository.getProductByName(name);
+
+        return product.map(productMapper::toProductDTO).orElse(null);
+    }
+
+    @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = productMapper.toProduct(productDTO);
         product = productRepository.save(product);
 
         return productMapper.toProductDTO(product);
+    }
+
+    @Override
+    public List<ProductDTO> createProducts(List<ProductDTO> productDTOs) {
+        List<Product> products = new ArrayList<>();
+        for (ProductDTO productDTO : productDTOs) {
+            products.add(productMapper.toProduct(productDTO));
+        }
+        products = (ArrayList<Product>) productRepository.saveAll(products);
+
+        List<ProductDTO> newProductDTOs = new ArrayList<>();
+        for (Product product : products) {
+            newProductDTOs.add(productMapper.toProductDTO(product));
+        }
+
+        return newProductDTOs;
     }
 }

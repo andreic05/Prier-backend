@@ -22,9 +22,28 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/{id}")
+    public ProductDTO getProduct(@PathVariable Long id) {
+        return productService.getProductById(id);
+    }
+
+    @GetMapping("/search")
+    public ProductDTO getProductByName(@RequestParam(required = false) String name) {
+        if (name != null) {
+            return productService.getProductByName(name);
+        }
+
+        return null;
+    }
+
     @PostMapping
     public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
         return productService.createProduct(productDTO);
+    }
+
+    @PostMapping("/bulk")
+    public List<ProductDTO> createProducts(@RequestBody List<ProductDTO> productDTOs) {
+        return productService.createProducts(productDTOs);
     }
 
 }
