@@ -1,5 +1,6 @@
 package com.andreichelaru.prier.product.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 @Setter
 public class ProductRequest {
     private Long id;
+    @NotNull
     private String name;
     private String description;
     private List<String> categories;

@@ -1,5 +1,7 @@
 package com.andreichelaru.prier.product;
 
+import com.andreichelaru.prier.common.exceptions.BusinessException;
+import com.andreichelaru.prier.common.exceptions.ErrorModel;
 import com.andreichelaru.prier.product.dto.request.ProductRequest;
 import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
@@ -24,20 +26,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAllProducts() {
         List<Product> products = (ArrayList<Product>) productRepository.findAll();
-        List<ProductResponse> productDTOs = new ArrayList<>();
+        List<ProductResponse> productResponses = new ArrayList<>();
 
         for (Product product : products) {
             ProductResponse productDTO = productMapper.toResponse(product);
-            productDTOs.add(productDTO);
+            productResponses.add(productDTO);
         }
 
-        return productDTOs;
+        return productResponses;
     }
 
     @Override
     public ProductResponse getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::toResponse).orElse(null);
+        if (product.isPresent()) return productMapper.toResponse(product.get());
+
+        throw new BusinessException(ErrorModel.createList(new ErrorModel("INVALID_ID", "No product with id " + id)));
     }
 
     @Override
@@ -49,6 +53,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
+        if (productRepository.existsByName(productRequest.getName())) throw new BusinessException(List.of(
+                new ErrorModel("PRODUCT_ALREADY_EXISTS", "Product with name " + productRequest.getName())));
+
         Product product = productMapper.toProduct(productRequest);
         product = productRepository.save(product);
 
@@ -58,16 +65,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> createProducts(List<ProductRequest> productRequests) {
         List<Product> products = new ArrayList<>();
-        for (ProductRequest productDTO : productRequests) {
-            products.add(productMapper.toProduct(productDTO));
+        for (ProductRequest productRequest : productRequests) {
+            if (productRepository.existsByName(productRequest.getName())) throw new BusinessException(List.of(
+                    new ErrorModel("PRODUCT_ALREADY_EXISTS", "Product with name " + productRequest.getName())));
+            if (productRequest.getName() == null) throw new BusinessException(List.of(
+                    new ErrorModel("INVALID_NAME", "Product name is required")));
+
+            products.add(productMapper.toProduct(productRequest));
         }
         products = (ArrayList<Product>) productRepository.saveAll(products);
 
-        List<ProductResponse> newProductResponses = new ArrayList<>();
-        for (Product product : products) {
-            newProductResponses.add(productMapper.toResponse(product));
-        }
-
-        return newProductResponses;
+        return productMapper.toProductResponseList(products);
     }
 }
