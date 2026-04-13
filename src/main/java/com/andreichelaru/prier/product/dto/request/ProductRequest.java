@@ -18,5 +18,14 @@ public class ProductRequest {
     private String metadata;
     // images
     // variants
+
+
+    @Override
+    public String toString() {
+        return "ProductRequest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
 

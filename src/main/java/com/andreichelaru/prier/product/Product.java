@@ -56,4 +56,12 @@ public class Product {
     )
     private Set<CollectionEntity> collections = new HashSet<>();
     */
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

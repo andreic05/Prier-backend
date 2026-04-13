@@ -16,5 +16,14 @@ public class ProductResponse {
     private String metadata;
     // images
     // variants
+
+
+    @Override
+    public String toString() {
+        return "ProductResponse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
 
