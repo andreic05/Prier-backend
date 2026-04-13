@@ -33,60 +33,60 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<List<CategoryResponse>> getCategories() {
+    public List<CategoryResponse> getCategories() {
         LOGGER.debug("Retrieving categories");
         List<Category> categories =  categoryRepository.findAll();
 
-        return ResponseEntity.ok(categoryMapper.toCategoryResponseList(categories));
+        return categoryMapper.toCategoryResponseList(categories);
     }
 
     @Override
-    public ResponseEntity<CategoryResponse> getCategoryById(Long id) {
+    public CategoryResponse getCategoryById(Long id) {
         LOGGER.debug("Retrieving category by id: {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             LOGGER.debug("Category found: {}", category.get());
-            return ResponseEntity.ok(categoryMapper.toCategoryResponse(category.get()));
+            return categoryMapper.toCategoryResponse(category.get());
         }
 
         throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "Category not found")));
     }
 
     @Override
-    public ResponseEntity<CategoryResponse> getCategoryByName(String name) {
+    public CategoryResponse getCategoryByName(String name) {
         LOGGER.debug("Retrieving category by name: {}", name);
         Optional<Category> category = categoryRepository.getCategoryByName(name);
         if (category.isPresent()) {
             LOGGER.debug("Category found: {}", category.get());
-            return ResponseEntity.ok(categoryMapper.toCategoryResponse(category.get()));
+            return categoryMapper.toCategoryResponse(category.get());
         }
 
         throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_NAME", "Category not found")));
     }
 
     @Override
-    public ResponseEntity<List<CategoryResponse>> getCategoriesByProductId(Long productId) {
+    public List<CategoryResponse> getCategoriesByProductId(Long productId) {
         LOGGER.debug("Retrieving product by id: {}", productId);
         Optional<Product> product = productRepository.findById(productId);
         if (product.isEmpty()) throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "Product not found")));
 
         LOGGER.debug("Product found: {}", product.get());
-        return ResponseEntity.ok(categoryMapper.toCategoryResponseList(new ArrayList<>(product.get().getCategories())));
+        return categoryMapper.toCategoryResponseList(new ArrayList<>(product.get().getCategories()));
     }
 
     @Override
-    public ResponseEntity<CategoryResponse> addCategory(CategoryRequest categoryRequest) {
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
         LOGGER.debug("Adding category: {}", categoryRequest);
         if  (categoryRepository.existsByName(categoryRequest.getName())) {
             throw new BusinessException(List.of(new ErrorModel("NAME_EXISTS", "Category already exists")));
         }
 
         LOGGER.debug("Category added");
-        return ResponseEntity.ok(categoryMapper.toCategoryResponse(categoryRepository.save(categoryMapper.toCategory(categoryRequest))));
+        return categoryMapper.toCategoryResponse(categoryRepository.save(categoryMapper.toCategory(categoryRequest)));
     }
 
     @Override
-    public ResponseEntity<CategoryResponse> updateCategory(CategoryRequest categoryRequest) {
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest) {
         LOGGER.debug("Updating category: {}", categoryRequest);
         LOGGER.debug("Retrieving category by id: {}", categoryRequest.getId());
         Optional<Category> category = categoryRepository.findById(categoryRequest.getId());
@@ -100,17 +100,17 @@ public class CategoryServiceImpl implements CategoryService {
         categoryEntity.setDescription(categoryRequest.getDescription());
 
         LOGGER.debug("Category updated");
-        return ResponseEntity.ok(categoryMapper.toCategoryResponse(categoryRepository.save(categoryEntity)));
+        return categoryMapper.toCategoryResponse(categoryRepository.save(categoryEntity));
     }
 
     @Override
-    public ResponseEntity<CategoryResponse> deleteCategoryById(Long id) {
+    public CategoryResponse deleteCategoryById(Long id) {
         LOGGER.debug("Deleting category by id: {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty())
             throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category doesn't exist")));
         categoryRepository.deleteById(id);
 
-        return ResponseEntity.ok(categoryMapper.toCategoryResponse(category.get()));
+        return categoryMapper.toCategoryResponse(category.get());
     }
 }

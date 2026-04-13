@@ -2,11 +2,15 @@ package com.andreichelaru.prier.category;
 
 import com.andreichelaru.prier.category.dto.request.CategoryRequest;
 import com.andreichelaru.prier.category.dto.response.CategoryResponse;
+import com.andreichelaru.prier.common.exceptions.BusinessException;
+import com.andreichelaru.prier.common.exceptions.ErrorModel;
 import jakarta.validation.Valid;
 import lombok.Getter;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,46 +29,47 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryResponse> getCategories() {
+    public ResponseEntity<List<CategoryResponse>> getCategories() {
         LOGGER.info("Retrieving categories");
 
-        return null;
+        return ResponseEntity.ok(categoryService.getCategories());
     }
 
     @GetMapping("/{id}")
-    public CategoryResponse getCategory(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long id) {
         LOGGER.info("Retrieving category with id {}", id);
 
-        return null;
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping("/search")
-    public List<CategoryResponse> searchCategory(@RequestParam String name, @RequestParam Long productId) {
+    public ResponseEntity<List<CategoryResponse>> searchCategory(@RequestParam String name, @RequestParam Long productId) {
         LOGGER.info("GET /search with name {} and product id {}", name, productId);
-        if (name != null) return null;
-        if (productId != null) return null;
+        if (name != null) return ResponseEntity.ok(List.of(categoryService.getCategoryByName(name)));
+        if (productId != null) return ResponseEntity.ok(categoryService.getCategoriesByProductId(productId));
 
-        return null;
+        throw new BusinessException(List.of(
+                new ErrorModel("INVALID_SEARCH", "Query parameters required")));
     }
 
     @PostMapping
-    public CategoryResponse createCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
         LOGGER.info("Creating category {}", categoryRequest);
 
-        return null;
+        return ResponseEntity.ok(categoryService.addCategory(categoryRequest));
     }
 
     @PutMapping
-    public CategoryResponse updateCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<CategoryResponse> updateCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
         LOGGER.info("Updating category {}", categoryRequest);
 
-        return null;
+        return ResponseEntity.ok(categoryService.updateCategory(categoryRequest));
     }
 
     @DeleteMapping("/{id}")
-    public CategoryResponse deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponse> deleteCategory(@PathVariable Long id) {
         LOGGER.info("Deleting category with id {}", id);
 
-        return null;
+        return ResponseEntity.ok(categoryService.deleteCategoryById(id));
     }
 }
