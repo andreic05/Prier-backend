@@ -43,7 +43,7 @@ public class ProductMapper {
     public List<ProductResponse> toProductResponseList(List<Product> products) {
         List<ProductResponse> productResponses = new ArrayList<>();
         for (Product product : products) {
-            ProductResponse productResponse = new ProductResponse();
+            productResponses.add(toResponse(product));
         }
 
         return productResponses;

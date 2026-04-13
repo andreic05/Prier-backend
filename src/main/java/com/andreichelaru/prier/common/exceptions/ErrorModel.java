@@ -21,11 +21,6 @@ public class ErrorModel {
         this.message = message;
     }
 
-    public static List<ErrorModel> createList(ErrorModel... errorModels) {
-
-        return new ArrayList<>(Arrays.asList(errorModels));
-    }
-
     @Override
     public String toString() {
         return "ErrorModel{" +
