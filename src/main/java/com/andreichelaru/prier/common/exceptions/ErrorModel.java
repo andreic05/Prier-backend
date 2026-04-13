@@ -25,4 +25,12 @@ public class ErrorModel {
 
         return new ArrayList<>(Arrays.asList(errorModels));
     }
+
+    @Override
+    public String toString() {
+        return "ErrorModel{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }
