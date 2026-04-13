@@ -28,7 +28,7 @@ public class CollectionController {
     }
 
     @GetMapping
-    public ResponseEntity<CollectionResponse> getAllCollections() {
+    public ResponseEntity<List<CollectionResponse>> getAllCollections() {
         LOGGER.info("Retrieving all collections");
 
         return null;
