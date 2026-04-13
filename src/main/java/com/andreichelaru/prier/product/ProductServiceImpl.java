@@ -2,6 +2,7 @@ package com.andreichelaru.prier.product;
 
 import com.andreichelaru.prier.common.exceptions.BusinessException;
 import com.andreichelaru.prier.common.exceptions.ErrorModel;
+import com.andreichelaru.prier.common.exceptions.ResourceNotFoundException;
 import com.andreichelaru.prier.product.dto.request.ProductRequest;
 import com.andreichelaru.prier.product.dto.response.ProductResponse;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
@@ -44,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         LOGGER.debug("Converting to dto");
         if (product.isPresent()) return productMapper.toResponse(product.get());
 
-        throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "No product with id " + id)));
+        throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "No product with id " + id)));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
         LOGGER.debug("Converting to dto");
         if (product.isPresent()) return productMapper.toResponse(product.get());
 
-        throw new BusinessException(List.of(new ErrorModel("INVALID_NAME", "No product with name " + name)));
+        throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_NAME", "No product with name " + name)));
     }
 
     @Override
