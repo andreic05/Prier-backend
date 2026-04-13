@@ -5,6 +5,7 @@ import com.andreichelaru.prier.category.dto.response.CategoryResponse;
 import com.andreichelaru.prier.category.mapper.CategoryMapper;
 import com.andreichelaru.prier.common.exceptions.BusinessException;
 import com.andreichelaru.prier.common.exceptions.ErrorModel;
+import com.andreichelaru.prier.common.exceptions.ResourceNotFoundException;
 import com.andreichelaru.prier.product.Product;
 import com.andreichelaru.prier.product.ProductRepository;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
             return ResponseEntity.ok(categoryMapper.toCategoryResponse(category.get()));
         }
 
-        throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category not found")));
+        throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "Category not found")));
     }
 
     @Override
@@ -60,14 +61,14 @@ public class CategoryServiceImpl implements CategoryService {
             return ResponseEntity.ok(categoryMapper.toCategoryResponse(category.get()));
         }
 
-        throw new BusinessException(List.of(new ErrorModel("INVALID_NAME", "Category not found")));
+        throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_NAME", "Category not found")));
     }
 
     @Override
     public ResponseEntity<List<CategoryResponse>> getCategoriesByProductId(Long productId) {
         LOGGER.debug("Retrieving product by id: {}", productId);
         Optional<Product> product = productRepository.findById(productId);
-        if (product.isEmpty()) throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Product not found")));
+        if (product.isEmpty()) throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "Product not found")));
 
         LOGGER.debug("Product found: {}", product.get());
         return ResponseEntity.ok(categoryMapper.toCategoryResponseList(new ArrayList<>(product.get().getCategories())));
