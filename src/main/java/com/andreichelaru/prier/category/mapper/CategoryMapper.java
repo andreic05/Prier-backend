@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryMapper {
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
     public CategoryMapper(ProductMapper productMapper) {
@@ -22,7 +22,7 @@ public class CategoryMapper {
         categoryResponse.setId(category.getId());
         categoryResponse.setName(category.getName());
         categoryResponse.setDescription(category.getDescription());
-        categoryResponse.setProducts(productMapper.toProductResponseList(category.getProducts()));
+        categoryResponse.setProducts(productMapper.toProductResponseList(new ArrayList<>(category.getProducts())));
 
         return categoryResponse;
     }
@@ -37,20 +37,12 @@ public class CategoryMapper {
     }
 
     public List<CategoryResponse> toCategoryResponseList(List<Category> categoryList) {
-        List<CategoryResponse> categoryResponseList = new ArrayList<>();
-        for (Category category : categoryList) {
-            categoryResponseList.add(toCategoryResponse(category));
-        }
 
-        return categoryResponseList;
+        return categoryList.stream().map(this::toCategoryResponse).toList();
     }
 
     public List<Category> toCategoryList(List<CategoryRequest> categoryRequestList) {
-        List<Category> categoryList = new ArrayList<>();
-        for (CategoryRequest categoryRequest : categoryRequestList) {
-            categoryList.add(toCategory(categoryRequest));
-        }
 
-        return categoryList;
+        return categoryRequestList.stream().map(this::toCategory).toList();
     }
 }

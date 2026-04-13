@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,5 +33,5 @@ public class Category {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "categories")
-    private List<Product> products;
+    private Set<Product> products = new HashSet<>();
 }

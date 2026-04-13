@@ -32,20 +32,12 @@ public class ProductMapper {
     }
 
     public List<Product> toProductList(List<ProductRequest> productRequests) {
-        List<Product> products = new ArrayList<>();
-        for (ProductRequest productRequest : productRequests) {
-            products.add(toProduct(productRequest));
-        }
 
-        return products;
+        return productRequests.stream().map(this::toProduct).toList();
     }
 
     public List<ProductResponse> toProductResponseList(List<Product> products) {
-        List<ProductResponse> productResponses = new ArrayList<>();
-        for (Product product : products) {
-            productResponses.add(toResponse(product));
-        }
 
-        return productResponses;
+        return products.stream().map(this::toResponse).toList();
     }
 }
