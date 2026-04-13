@@ -2,6 +2,7 @@ package com.andreichelaru.prier.common.exceptions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +22,14 @@ public class CustomExceptionHandler {
         LOGGER.error(ex.getErrors().toString());
 
         return ResponseEntity.badRequest().body(ex.getErrors());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<List<ErrorModel>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        LOGGER.warn("ResourceNotFoundException occurred with {} errors", ex.getErrors().size());
+        LOGGER.error(ex.getErrors().toString());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getErrors());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
