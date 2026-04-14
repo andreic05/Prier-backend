@@ -5,10 +5,12 @@ import com.andreichelaru.prier.category.dto.request.CategoryRequest;
 import com.andreichelaru.prier.category.dto.response.CategoryResponse;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CategoryMapper {
     private final ProductMapper productMapper;
 

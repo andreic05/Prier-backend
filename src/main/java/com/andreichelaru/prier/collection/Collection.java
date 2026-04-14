@@ -31,6 +31,6 @@ public class Collection {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "collections")
-    private List<Product> products;
+//    @ManyToMany(mappedBy = "collections")
+//    private List<Product> products;
 }

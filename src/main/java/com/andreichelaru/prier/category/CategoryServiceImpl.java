@@ -71,6 +71,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (product.isEmpty()) throw new ResourceNotFoundException(List.of(new ErrorModel("INVALID_ID", "Product not found")));
 
         LOGGER.debug("Product found: {}", product.get());
+        if (product.get().getCategories().isEmpty())
+            LOGGER.warn("Product has no categories");
         return categoryMapper.toCategoryResponseList(new ArrayList<>(product.get().getCategories()));
     }
 
@@ -109,8 +111,9 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty())
             throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category doesn't exist")));
+        CategoryResponse response = categoryMapper.toCategoryResponse(category.get());
         categoryRepository.deleteById(id);
 
-        return categoryMapper.toCategoryResponse(category.get());
+        return response;
     }
 }
