@@ -96,7 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category doesn't exist")));
 
         Category categoryEntity = category.get();
-        if (categoryRepository.existsByName(categoryRequest.getName()))
+        if (!categoryRequest.getName().equals(categoryEntity.getName()) && categoryRepository.existsByName(categoryRequest.getName()))
             throw new BusinessException(List.of(new ErrorModel("NAME_EXISTS", "Category already exists")));
         categoryEntity.setName(categoryRequest.getName());
         categoryEntity.setDescription(categoryRequest.getDescription());
