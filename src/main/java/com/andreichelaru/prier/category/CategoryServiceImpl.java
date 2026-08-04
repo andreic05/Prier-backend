@@ -108,11 +108,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse deleteCategoryById(Long id) {
         LOGGER.debug("Deleting category by id: {}", id);
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isEmpty())
-            throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category doesn't exist")));
-        CategoryResponse response = categoryMapper.toCategoryResponse(category.get());
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(List.of(new ErrorModel("INVALID_ID", "Category doesn't exist"))));
+
+        CategoryResponse response = categoryMapper.toCategoryResponse(category);
+        categoryRepository.delete(category);
 
         return response;
     }
