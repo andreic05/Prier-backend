@@ -74,6 +74,10 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public CollectionResponse createCollection(CollectionRequest collectionRequest) {
         LOGGER.debug("Creating collection {}", collectionRequest);
+        if (collectionRepository.existsByName(collectionRequest.getName())) {
+            throw new BusinessException(List.of(new ErrorModel("NAME_EXISTS", "Collection already exists")));
+        }
+
         Collection collection = collectionRepository.save(collectionMapper.toCollection(collectionRequest));
 
         LOGGER.debug("Collection created {}", collection);

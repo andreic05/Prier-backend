@@ -6,10 +6,12 @@ import com.andreichelaru.prier.collection.dto.response.CollectionResponse;
 import com.andreichelaru.prier.product.Product;
 import com.andreichelaru.prier.product.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CollectionMapper {
     private final ProductMapper productMapper;
 
