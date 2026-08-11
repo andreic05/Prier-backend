@@ -43,7 +43,7 @@ public class CollectionController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CollectionResponse>> getCollectionsBySearch(@RequestParam String name, @RequestParam Long productId) {
+    public ResponseEntity<List<CollectionResponse>> getCollectionsBySearch(@RequestParam(required = false) String name, @RequestParam(required = false) Long productId) {
         LOGGER.info("GET /search with name {} and product {}", name, productId);
         if (name != null) return ResponseEntity.ok(List.of(collectionService.getCollectionByName(name)));
         if (productId != null) return ResponseEntity.ok(List.of(collectionService.getCollectionById(productId)));
