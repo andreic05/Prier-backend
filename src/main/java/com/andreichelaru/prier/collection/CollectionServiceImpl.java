@@ -74,6 +74,11 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public CollectionResponse createCollection(CollectionRequest collectionRequest) {
         LOGGER.debug("Creating collection {}", collectionRequest);
+
+        if (collectionRequest.getName() == null || collectionRequest.getName().isEmpty()) {
+            throw new BusinessException(List.of(new ErrorModel("NO_NAME", "The collection to be created has no name")));
+        }
+
         if (collectionRepository.existsByName(collectionRequest.getName())) {
             throw new BusinessException(List.of(new ErrorModel("NAME_EXISTS", "Collection already exists")));
         }
