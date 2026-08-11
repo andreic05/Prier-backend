@@ -46,7 +46,7 @@ public class CollectionController {
     public ResponseEntity<List<CollectionResponse>> getCollectionsBySearch(@RequestParam(required = false) String name, @RequestParam(required = false) Long productId) {
         LOGGER.info("GET /search with name {} and product {}", name, productId);
         if (name != null) return ResponseEntity.ok(List.of(collectionService.getCollectionByName(name)));
-        if (productId != null) return ResponseEntity.ok(List.of(collectionService.getCollectionById(productId)));
+        if (productId != null) return ResponseEntity.ok(collectionService.getCollectionsByProductId(productId));
 
         throw new BusinessException(List.of(new ErrorModel("INVALID_SEARCH", "Provide query parameters")));
     }
