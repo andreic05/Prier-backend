@@ -1,5 +1,6 @@
 package com.andreichelaru.prier.product;
 
+import com.andreichelaru.prier.collection.Collection;
 import com.andreichelaru.prier.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,7 +45,24 @@ public class Product {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "prod_cat",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "collection_id")
+    )
+    private Set<Collection> collections = new HashSet<>();
+
     /*
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<ProductVariantEntity> variants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<ImageEntity> images = new ArrayList<>();
+
+
+
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<ProductVariantEntity> variants = new ArrayList<>();
 

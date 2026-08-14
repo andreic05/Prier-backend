@@ -2,28 +2,34 @@ package com.andreichelaru.prier.collection;
 
 import com.andreichelaru.prier.product.Product;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString(of = {"id", "name"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "collections")
 public class Collection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     private String description;
+
+    @Column(columnDefinition = "json")
+    private String metadata;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -31,6 +37,6 @@ public class Collection {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-//    @ManyToMany(mappedBy = "collections")
-//    private List<Product> products;
+    @ManyToMany(mappedBy = "collections")
+    private Set<Product> products = new HashSet<>();
 }
