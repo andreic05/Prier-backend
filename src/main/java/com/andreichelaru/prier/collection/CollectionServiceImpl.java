@@ -8,6 +8,7 @@ import com.andreichelaru.prier.common.exceptions.ErrorModel;
 import com.andreichelaru.prier.common.exceptions.ResourceNotFoundException;
 import com.andreichelaru.prier.product.Product;
 import com.andreichelaru.prier.product.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,32 +91,37 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
+    @Transactional
     public CollectionResponse updateCollection(CollectionRequest collectionRequest) {
         LOGGER.debug("Updating collection {}", collectionRequest);
-        if (collectionRepository.existsByName(collectionRequest.getName()))
-            throw new BusinessException(List.of(new ErrorModel("INVALID_NAME", "Collection name already exists")));
+
         Optional<Collection> collection = collectionRepository.findById(collectionRequest.getId());
         if (collection.isEmpty())
             throw new BusinessException(List.of(new  ErrorModel("INVALID_ID", "Collection with id " + collectionRequest.getId() + " not found")));
+
+        if (!collectionRequest.getName().equals(collection.get().getName()) && collectionRepository.existsByName(collectionRequest.getName()))
+            throw new BusinessException(List.of(new ErrorModel("INVALID_NAME", "Collection name already exists")));
 
         Collection collectionEntity = collection.get();
         collectionEntity.setName(collectionRequest.getName());
         collectionEntity.setDescription(collectionRequest.getDescription());
 
         LOGGER.debug("Collection updated {}", collectionEntity);
-        return collectionMapper.toCollectionResponse(collectionRepository.save(collectionEntity));
+        return collectionMapper.toCollectionResponse(collectionEntity);
     }
 
     @Override
+    @Transactional
     public CollectionResponse deleteCollectionById(Long id) {
         LOGGER.debug("Deleting collection by id {}", id);
-        Optional<Collection> collection = collectionRepository.findById(id);
-        if (collection.isEmpty())
-            throw new BusinessException(List.of(new ErrorModel("INVALID_ID", "Collection with id " + id + " not found")));
+        Collection collection = collectionRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(List.of(new ErrorModel("INVALID_ID", "Collection with id " + id + " not found"))));
+
+        CollectionResponse response = collectionMapper.toCollectionResponse(collection);
 
         collectionRepository.deleteById(id);
 
-        LOGGER.debug("Collection deleted {}", collection.get());
-        return collectionMapper.toCollectionResponse(collection.get());
+        LOGGER.debug("Collection deleted {}", response);
+        return response;
     }
 }
