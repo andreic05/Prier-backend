@@ -1,0 +1,80 @@
+@baseUrl = http://localhost:8080/api/v1
+
+
+### ============================================================
+### CREATE FIRST COLLECTION
+### ============================================================
+
+# @name createFirstCollection
+POST {{baseUrl}}/collections
+Content-Type: application/json
+
+{
+    "name": "collection1",
+    "description": "description of collection1"
+}
+
+### ============================================================
+### CREATE second COLLECTION
+### ============================================================
+
+# @name createSecondCollection
+POST {{baseUrl}}/collections
+Content-Type: application/json
+
+{
+    "name": "collection2",
+    "description": "description of collection2"
+}
+
+### ============================================================
+### UPDATE FIRST COLLECTION
+### ============================================================
+
+PUT {{baseUrl}}/collections
+Content-Type: application/json
+
+{
+    "id": {{createFirstCollection.response.body.id}},
+    "name": "{{createFirstCollection.response.body.name}}",
+    "description": "description was updated"
+}
+
+### ============================================================
+### LIST ALL COLLECTIONES
+### ============================================================
+
+GET {{baseUrl}}/collections
+Content-Type: application/json
+
+### ============================================================
+### GET COLLECTION BY ID
+### ============================================================
+
+GET {{baseUrl}}/collections/{{createFirstCollection.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### GET COLLECTION BY NAME
+### ============================================================
+
+GET {{baseUrl}}/collections/search?name={{createFirstCollection.response.body.name}}
+Content-Type: application/json
+
+### ============================================================
+### DELETE FIRST COLLECTION
+### ============================================================
+
+DELETE {{baseUrl}}/collections/{{createFirstCollection.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### DELETE SECOND COLLECTION
+### ============================================================
+
+DELETE {{baseUrl}}/collections/{{createSecondCollection.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### END OF COLLECTION
+### ============================================================

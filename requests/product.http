@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:8080/api/v1
+
+### More endpoinds should be created for product.
+
+
+### ============================================================
+### CREATE FIRST PRODUCT
+### ============================================================
+
+# @name createFirstProduct
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+    "name": "product1",
+    "description": "description of product1"
+}
+
+### ============================================================
+### UPDATE FIRST PRODUCT
+### ============================================================
+
+PUT {{baseUrl}}/products
+Content-Type: application/json
+
+{
+    "id": {{createFirstProduct.response.body.id}},
+    "name": {{createFirstProduct.response.body.name}},
+    "description": "description was updated"
+}
+
+### ============================================================
+### DELETE FIRST PRODUCT
+### ============================================================
+
+DELETE {{baseUrl}}/products/{{createFirstProduct.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### END OF PRODUCT
+### ============================================================
