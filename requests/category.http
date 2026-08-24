@@ -1,0 +1,80 @@
+@baseUrl = http://localhost:8080/api/v1
+
+
+### ============================================================
+### CREATE FIRST CATEGORY
+### ============================================================
+
+# @name createFirstCategory
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "name": "category1",
+    "description": "description of category1"
+}
+
+### ============================================================
+### CREATE second CATEGORY
+### ============================================================
+
+# @name createSecondCategory
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "name": "category2",
+    "description": "description of category2"
+}
+
+### ============================================================
+### UPDATE FIRST CATEGORY
+### ============================================================
+
+PUT {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "id": {{createFirstCategory.response.body.id}},
+    "name": "{{createFirstCategory.response.body.name}}",
+    "description": "description was updated"
+}
+
+### ============================================================
+### LIST ALL CATEGORYES
+### ============================================================
+
+GET {{baseUrl}}/categories
+Content-Type: application/json
+
+### ============================================================
+### GET CATEGORY BY ID
+### ============================================================
+
+GET {{baseUrl}}/categories/{{createFirstCategory.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### GET CATEGORY BY NAME
+### ============================================================
+
+GET {{baseUrl}}/categories/search?name={{createFirstCategory.response.body.name}}
+Content-Type: application/json
+
+### ============================================================
+### DELETE FIRST CATEGORY
+### ============================================================
+
+DELETE {{baseUrl}}/categories/{{createFirstCategory.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### DELETE SECOND CATEGORY
+### ============================================================
+
+DELETE {{baseUrl}}/categories/{{createSecondCategory.response.body.id}}
+Content-Type: application/json
+
+### ============================================================
+### END OF CATEGORY
+### ============================================================
