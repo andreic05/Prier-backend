@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,39 +29,39 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> getProducts() {
+    public ResponseEntity<List<ProductResponse>> getProducts() {
         LOGGER.info("Getting all products");
-        return productService.getAllProducts();
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
 
     @GetMapping("/{id}")
-    public ProductResponse getProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
         LOGGER.info("Getting product with id: {}", id);
-        return productService.getProductById(id);
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping("/search")
-    public ProductResponse getProductByName(@RequestParam(required = false) String name) {
+    public ResponseEntity<ProductResponse> getProductByName(@RequestParam(required = false) String name) {
         LOGGER.info("GET /search called with name: {}", name);
         if (name != null) {
             LOGGER.info("Getting product by name: {}", name);
-            return productService.getProductByName(name);
+            return ResponseEntity.ok(productService.getProductByName(name));
         }
 
         throw new BusinessException(List.of(new ErrorModel("MISSING_QUERY_PARAMETER", "Product name is required")));
     }
 
     @PostMapping
-    public com.andreichelaru.prier.product.dto.response.ProductResponse createProduct(@Valid @RequestBody ProductRequest ProductResponse) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest ProductResponse) {
         LOGGER.info("Creating product with name: {}", ProductResponse.getName());
-        return productService.createProduct(ProductResponse);
+        return ResponseEntity.ok(productService.createProduct(ProductResponse));
     }
 
     @PostMapping("/bulk")
-    public List<ProductResponse> createProducts(@RequestBody List<ProductRequest> ProductResponses) {
+    public ResponseEntity<List<ProductResponse>> createProducts(@RequestBody List<ProductRequest> ProductResponses) {
         LOGGER.info("Creating products with {} products", ProductResponses.size());
-        return productService.createProducts(ProductResponses);
+        return ResponseEntity.ok(productService.createProducts(ProductResponses));
     }
 
 }
